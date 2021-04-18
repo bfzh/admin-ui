@@ -88,7 +88,7 @@ request.interceptors.request.use(config => {
 
 // response interceptor
 request.interceptors.response.use(response => {
-  console.log('response:', response)
+  // console.log('response:', response)
   return response.data
 }, errorHandler)
 

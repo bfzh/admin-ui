@@ -1,8 +1,17 @@
 <template>
   <div>
     <div class="antd-pro-pages-dashboard-analysis-twoColLayout" :class="!isMobile && 'desktop'">
-      <a-row :gutter="24" type="flex">
-        <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24">
+      <a-row :gutter="16" type="flex">
+        <a-col :xl="2" :lg="0" :md="0" :sm="0" :xs="0">
+          <div class="detailed-list">
+          <span class="triangle"></span>
+            <div class="list-btn" @click="$router.push({path: '/newBill'})">
+              <span>点击</span>
+              <span>开清单</span>
+            </div>
+          </div>
+        </a-col>
+        <a-col :xl="11" :lg="24" :md="24" :sm="24" :xs="24">
           <a-card
             class="antd-pro-pages-dashboard-analysis-salesCard"
             :bordered="false"
@@ -26,8 +35,8 @@
             <!-- </div> -->
           </a-card>
         </a-col>
-        <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24">
-          <a-card :loading="noteLoading" :bordered="false" title="记事本/图片" :style="{ height: '100%' }">
+        <a-col :xl="11" :lg="24" :md="24" :sm="24" :xs="24">
+          <a-card :loading="noteLoading" :bordered="false" title="事项提示" :style="{ height: '100%' }">
             <div slot="extra" style="height: inherit;">
               <div class="btnList">
                 <div class="btn active" @click="addNote">新建</div>
@@ -37,6 +46,7 @@
             <div class="noteChangeBtn">
               <a-button style="color:#f2637b;border-color:#f2637b;" @click="noteChange('1')">重要事件</a-button>
               <a-button style="color:#3ba0ff;border-color:#3ba0ff;" @click="noteChange('2')">一般事件</a-button>
+              <a-button style="color:#1D18FF;border-color:#1D18FF;" @click="noteChange('4')">未结清清单</a-button>
               <a-button style="color:#999999;border-color:#999999;" @click="noteChange('3')">全部</a-button>
             </div>
             <div class="noteList">
@@ -333,12 +343,14 @@
                 itemHeight: 10,
                 formatter: (name) => {
                   let val = ''
+                  let percentage = ''
                   data.forEach((element) => {
                     if (name === element.productName) {
                       val = element.money
+                      percentage = element.percentage
                     }
                   })
-                  return name + '  ￥' + val
+                  return name + ' | ' + percentage + '  ￥' + val
                 }
               }
               : {},
@@ -348,7 +360,7 @@
                 type: 'pie',
                 radius: ['50%', '70%'],
                 avoidLabelOverlap: false,
-                right: 100,
+                right: 180,
                 label: {
                   show: false,
                   position: 'center'
@@ -540,6 +552,34 @@
 
     /deep/ .ant-card-head {
       position: relative;
+    }
+  }
+  .detailed-list {
+    height: 100%;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16PX;
+    position: relative;
+    .list-btn{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #3AA0FF;
+      cursor: pointer;
+    }
+    .triangle{
+      position: absolute;
+      top: 36px;
+      left: -24px;
+      display: inline-block;
+      width: 0;
+      height: 0;
+      border-right-color: #000;
+      border-top: 13px solid transparent;
+      border-right: 33px solid #fff;
+      border-bottom: 13px solid transparent;
     }
   }
 

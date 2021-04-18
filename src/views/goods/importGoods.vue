@@ -23,6 +23,7 @@
           </div>
         </div>
         <a-form-model
+          style="padding-left: 30%"
           class="ant-advanced-search-form"
           ref="ruleForm"
           :model="form"
@@ -30,31 +31,44 @@
           :label-col="labelCol"
           :wrapper-col="wrapperCol"
           @submit="confirm">
-          <a-form-model-item label="类别" required prop="productCategoryName">
+          <a-form-model-item label="类别" required prop="productCategoryName" style="width: 60%">
             <a-dropdown>
               <a-input
                 name="id"
                 v-model="form.productCategoryName"
-                placeholder="请输入类别"
+                placeholder="请输入类别 (例如: 电线电缆)"
                 autocomplete="off"
                 allowClear
-                @change="inputChange" />
+                @change="inputChange($event, 'productCategoryName')" />
               <a-menu slot="overlay" v-if="categories && categories.length>0">
-                <a-menu-item v-for="item in categories" :key="item.key" @click="categoriesChange(item.key)">
+                <a-menu-item v-for="item in types" :key="item.key" @click="categoriesChange(item.key, 'productCategoryName')">
                   <a>{{ item.value }}</a>
                 </a-menu-item>
               </a-menu>
             </a-dropdown>
           </a-form-model-item>
-          <a-form-model-item label="商品名称" prop="productName">
-            <a-input placeholder="请输入商品名称" v-model="form.productName" :maxLength="15" allowClear />
-          </a-form-model-item>
-          <a-form-model-item label="商品数量" prop="amount">
-            <a-input-number style="width:100%" placeholder="请输入商品数量" :min="1" allowClear v-model.number="form.amount" />
-          </a-form-model-item>
-          <a-form-model-item label="单位" prop="productUnit">
+          <a-form-model-item label="商品名称" prop="productName" style="width: 60%">
             <a-dropdown>
-              <a-input placeholder="请输入单位" v-model="form.productUnit" maxlenth="3" autocomplete="off" allowClear />
+              <a-input
+                placeholder="请输入商品名称 (例如: 户外投光灯50w)"
+                v-model="form.productName"
+                :maxLength="15"
+                allowClear
+                autocomplete="off"
+                @change="inputChange($event, 'productName')" />
+              <a-menu slot="overlay" v-if="categories && categories.length>0">
+                <a-menu-item v-for="item in types" :key="item.key" @click="categoriesChange(item.key, 'productName')">
+                  <a>{{ item.value }}</a>
+                </a-menu-item>
+              </a-menu>
+            </a-dropdown>
+          </a-form-model-item>
+          <a-form-model-item label="商品数量" prop="amount" style="width: 60%">
+            <a-input-number style="width:100%" placeholder="请输入商品数量 （例如: 100）" :min="1" allowClear v-model.number="form.amount" />
+          </a-form-model-item>
+          <a-form-model-item label="单位" prop="productUnit" style="width: 60%">
+            <a-dropdown>
+              <a-input placeholder="请输入数量单位 （例如: 个）" v-model="form.productUnit" maxlenth="3" autocomplete="off" allowClear />
               <a-menu slot="overlay" v-if="units && units.length>0">
                 <a-menu-item v-for="item in units" :key="item.key" @click="unitsChange(item.value)">
                   <a>{{ item.value }}</a>
@@ -62,10 +76,10 @@
               </a-menu>
             </a-dropdown>
           </a-form-model-item>
-          <a-form-model-item label="备注" prop="remark">
-            <a-input type="textarea" placeholder="备注" style="min-height:100px" v-model="form.remark" />
+          <a-form-model-item label="备注" prop="remark" style="width: 100%;">
+            <a-input type="textarea" placeholder="备注" style="min-height:100px; width: 100%" v-model="form.remark"  />
           </a-form-model-item>
-          <a-form-model-item :wrapper-col="{ span: 14, offset: 3 }">
+          <a-form-model-item :wrapper-col="{ span: 24, offset: 4 }" style="margin-top: 200px">
             <a-button type="primary" html-type="submit" :loading="iconLoading">确定</a-button>
             <a-button @click="handleReset" :style="{ marginLeft: '8px' }">重置</a-button>
           </a-form-model-item>
@@ -92,11 +106,12 @@
       return {
         iconLoading: false,
         labelCol: {
-          span: 3
+          span: 5
         },
         wrapperCol: {
           span: 14
         },
+        types: [],
 
         form: {
           productCategory: '',
@@ -148,18 +163,24 @@
       this.$store.dispatch('getCategories')
       this.$store.dispatch('getunits')
     },
-    mounted () {},
+    mounted () {
+      setTimeout(() => {
+        this.types = this.categories
+      }, 500)
+    },
     methods: {
-      inputChange (e) {
+      inputChange (e, type) {
+        console.log(e.target.value)
+        this.retrieval(e.target.value)
         let form = this.form
         form.productCategory = ''
-        form.productCategoryName = e.target.value
+        form[type] = e.target.value
         this.form = form
       },
-      categoriesChange (key) {
+      categoriesChange (key, type) {
         let form = this.form
         form.productCategory = ''
-        form.productCategoryName = this.getName(key)
+        form[type] = this.getName(key)
         form.productCategory = key
         this.form = form
       },
@@ -168,9 +189,19 @@
         form.productUnit = value
         this.form = form
       },
+      retrieval (val) {
+        let _temp = []
+        this.categories.forEach((item) => {
+          if (item.value.includes(val)) {
+            _temp.push(item)
+          }
+        })
+        console.log(_temp)
+        this.types = [..._temp]
+      },
       getName (key) {
         let name = ''
-        this.categories.forEach((element) => {
+        this.types.forEach((element) => {
           if (element.key === key) {
             name = element.value
           }
@@ -270,4 +301,11 @@
 </script>
 
 <style>
+  #table-container .ant-input{
+    border-radius: 3px;
+  }
+
+  #table-container .ant-form-item-label{
+    width: 100px;
+  }
 </style>

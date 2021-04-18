@@ -21,6 +21,18 @@ export const asyncRouterMap = [
         component: () => import('@/views/dashboard/index'),
         meta: { title: '首页', keepAlive: true, icon: 'profile' }
       },
+      {
+        path: '/newBill',
+        name: 'NewBill',
+        component: () => import('@/views/bill/newBill'),
+        meta: { title: '销货清单', keepAlive: true, icon: 'profile' }
+      },
+      {
+        path: '/soldList',
+        name: 'SoldList',
+        component: () => import('@/views/bill/soldList'),
+        meta: { title: '售出记录', keepAlive: true, icon: 'profile' }
+      },
       // 货物管理
       {
         path: '/goods',
@@ -48,7 +60,7 @@ export const asyncRouterMap = [
           // }
         ]
       },
-      // 票据
+      /* // 票据
 
       {
         path: '/bill',
@@ -69,7 +81,7 @@ export const asyncRouterMap = [
             meta: { title: '售出记录', keepAlive: true }
           }
         ]
-      },
+      }, */
       // 货物状态
       {
         path: '/goodStstus',
@@ -91,12 +103,12 @@ export const asyncRouterMap = [
         component: () => import('@/views/note/index'),
         meta: { title: '记事本/图片', keepAlive: true, icon: 'profile' }
       },
-      {
+      /* {
         path: '/note/index',
         name: 'note',
         component: () => import('@/views/note/index'),
         meta: { title: '记事本/图片', keepAlive: true, icon: 'profile' }
-      },
+      }, */
       {
         path: '/account/center',
         component: () => import('@/views/account/settings/BaseSetting'),
