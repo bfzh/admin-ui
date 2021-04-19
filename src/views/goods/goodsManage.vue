@@ -116,10 +116,10 @@
               </div>
             </template>
           </a-table-column>
-          <a-table-column key="remark" title="备注" data-index="remark">
-            <template slot-scope="text, record">
-              <span v-if="text" @click="showDialog(record)">{{ text | formatStr(8) }}</span>
-              <span v-else @click="showDialog(record)">{{ '备注' }}</span>
+          <a-table-column key="remark" title="备注" data-index="remark" class="stockTitle" >
+            <template slot-scope="text, record" >
+              <span style="color:#1890ff; cursor: pointer" v-if="text" @click="showDialog(record)">{{ text | formatStr(8) }}</span>
+              <span style="color:#1890ff; cursor: pointer" v-else @click="showDialog(record)">{{ '备注' }}</span>
             </template>
           </a-table-column>
           <a-table-column key="createTime" title="创建时间" data-index="createTime" />
@@ -144,14 +144,14 @@
                 style="margin-left:5px;"
               >下架</a-button
               >
-              <a-button
+              <!-- <a-button
                 :loadin="deletloading"
                 type="danger"
                 size="small"
                 @click="deletHandle(record)"
                 style="margin-left:5px;"
               >删除</a-button
-              >
+              > -->
             </template>
           </a-table-column>
         </BaseTable>
